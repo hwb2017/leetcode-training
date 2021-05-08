@@ -1,5 +1,6 @@
 /**
  * 1) 单链表的插入、删除、查找操作；
+ * 2）单链表反转
  */
 class Node {
   constructor(value) {
@@ -73,4 +74,37 @@ class SinglyLinkedList {
         currentNode = currentNode.next;
     }
   }
+  // 反转单链表
+  reverse() {
+    // head节点即哨兵，作用就是使所有链表，包括空链表的头节点不为null，并使对单链表的插入、删除操作不需要区分是否为空表或是否在第一个位置进行，
+    // 从而与其他位置的插入、删除操作一致，降低编码复杂度
+    // 所以反转链表的时候不需要带上头节点
+    let currentNode = this.head.next;
+    // 第一个节点的前驱结点让其指向 null, 因为头节点不参与链表反转
+    let prevNode = null;
+
+    while (currentNode !== null) {
+      // 每个循环中不断进行 currentNode, nextNode 和 prevNode 三个指针的赋值，
+      // 其中currentNode 和 prevNode 在赋值前就被引用了，因此这两个变量需要在循环体外赋初始值
+      // 先保留下一结点的指针，避免指针丢失
+      let nextNode = currentNode.next;
+      // 这一步真正实现指针反转，指向前驱节点
+      currentNode.next = prevNode;
+      prevNode = currentNode;
+      currentNode = nextNode;
+    }
+    // 最后给反转后的链表戴上头结点，这里最后一个currentNode为null，最后一个prevNode才指向第一个结点，因此选 prevNode 来赋值
+    this.head.next = prevNode;
+  }
+  // 环的检测，快慢指针法
+  checkCircle() {
+    let fast = this.head.next;
+    let slow = this.head;
+    while (fast != null && fast.next != null) {
+      fast = fast.next.next;
+      slow = slow.next;
+      if (show === fast) return true;
+    } 
+    return false;
+  } 
 }
