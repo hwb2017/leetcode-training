@@ -107,4 +107,61 @@ class SinglyLinkedList {
     } 
     return false;
   } 
+  // 删除倒数第k个节点
+  removeByIndexFromEnd(index) {
+    // 先判断是否是环链表
+    if (this.checkCircle) return false;
+    let pos = 1;
+    this.reverse()
+    let currentNode = this.head.next;
+    while (currentNode !== null && pos < index) {
+      currentNode = currentNode++
+      pos++;
+    }
+    if (currentNode === null) {
+      console.log('该结点不存在');
+      return false;
+    }
+    this.remove(currentNode.value);
+    this.reverse();
+  }
+  // 求链表的中间结点
+  findMiddleNode() {
+    // 忽略头结点
+    let fast = this.head.next;
+    let slow = this.head.next;
+    while (fast.next != null && fast.next.next != null) {
+      fast = fast.next.next;
+      slow = slow.next;
+    }
+    console.log(slow);
+    return slow;
+  }
+}
+
+const mergeSortedLists = (listA, listB) => {
+  if (!listA) {
+    return listB
+  }
+  if (!listB) {
+    return listA
+  }
+  let resultList = new Node('head');
+  while (a !== null && b !== null) {
+    if (a.value < b.value) {
+      resultList.next = a;
+      a = a.next;
+    } else {
+      resultList.next = b;
+      b = b.next;
+    }
+    resultList = resultList.next;
+  }
+  // 如果链表a或链表b还有剩余结点，则接到合并后的链表的后面
+  if (a !== null) {
+    resultList.next = a;
+  } else {
+    resultList.next = b;
+  }
+  return resultList;
 }
