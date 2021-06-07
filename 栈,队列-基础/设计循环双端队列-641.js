@@ -3,7 +3,7 @@
  * @param {number} k
  */
  var MyCircularDeque = function(k) {
-    this.list = Array(k);
+    this.list = Array(k).fill(null);
     // 队列头指针,指向队列的第一个元素
     this.front = 0;
     // 队列尾指针，指向队列的最后一个元素的下一个索引
@@ -45,7 +45,12 @@ MyCircularDeque.prototype.insertLast = function(value) {
  * @return {boolean}
  */
 MyCircularDeque.prototype.deleteFront = function() {
-
+    if (this.isEmpty()) {
+        return false;
+    }
+    this.list[this.front] = null;
+    this.front = (this.front + 1) % this.capacity;
+    return true;
 };
 
 /**
@@ -53,7 +58,12 @@ MyCircularDeque.prototype.deleteFront = function() {
  * @return {boolean}
  */
 MyCircularDeque.prototype.deleteLast = function() {
-
+    if (this.isEmpty()) {
+        return false;
+    }
+    this.rear = (this.rear - 1 + this.capacity) % this.capacity;
+    this.list[this.rear] = null;
+    return true;
 };
 
 /**
@@ -61,7 +71,10 @@ MyCircularDeque.prototype.deleteLast = function() {
  * @return {number}
  */
 MyCircularDeque.prototype.getFront = function() {
-
+    if (this.isEmpty()) {
+        return -1;
+    }
+    return this.list[this.front];
 };
 
 /**
@@ -69,7 +82,11 @@ MyCircularDeque.prototype.getFront = function() {
  * @return {number}
  */
 MyCircularDeque.prototype.getRear = function() {
-
+    if (this.isEmpty()) {
+        return -1;
+    }
+    let index = (this.rear - 1 + this.capacity) % this.capacity;
+    return this.list[index];
 };
 
 /**
@@ -77,7 +94,7 @@ MyCircularDeque.prototype.getRear = function() {
  * @return {boolean}
  */
 MyCircularDeque.prototype.isEmpty = function() {
-    return this.front === this.rear && !this.list[this.front]
+    return this.front === this.rear && this.list[this.front] === null;
 };
 
 /**
@@ -85,7 +102,7 @@ MyCircularDeque.prototype.isEmpty = function() {
  * @return {boolean}
  */
 MyCircularDeque.prototype.isFull = function() {
-    return this.front === this.rear && this.list[this.front]
+    return this.front === this.rear && this.list[this.front] !== null;
 };
 
 /**
