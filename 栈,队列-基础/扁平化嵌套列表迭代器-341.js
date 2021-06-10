@@ -50,10 +50,13 @@ NestedIterator.prototype.hasNext = function() {
             break
         if (typeof this.stack[0] === "number")
             break;
-        this.stack = this.stack[0].getList();
-        console.log(this.stack);
+        // let rest = this.stack.slice(1);   
+        // this.stack = this.stack[0].getList();
+        // this.stack = this.stack.concat(rest);
+        let temp = this.stack.shift().getList();
+        this.stack = temp.concat(this.stack);
+        // console.log(this.stack);
     }
-    // console.log(this.stack, this.nestedList);
     return this.stack.length + this.nestedList.length > 0;
 };
 
