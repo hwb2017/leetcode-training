@@ -32,6 +32,35 @@ class BinaryTree {
             }
         }
     }
+    // 寻找树中大于给定节点值的最小节点，即给定节点右子树中的最小节点
+    ceil(node) {
+      if (node.right === null) return null;
+      let current = node.right;
+      while(current !== null) {
+          if (current.left === null) return current;
+          current = current.left
+      }
+    }
+    // 寻找树中小于给定节点值的最大节点，即给定节点左子树中的最大节点
+    floor(node) {
+      if (node.left === null) return null;
+      let current = node.left;
+      while (current !== null) {
+          if (current.right === null) return current;
+          current = current.right;
+      }
+    }
+    find(val, current = this.root) {
+        if (current === null) return null
+        if (current.val === val) {
+            return current
+        }
+        if (current.val < val) {
+            return this.find(val, current.right)
+        } else if (current.val < val) {
+            return this.find(val, current.left)
+        }
+    }
     levelOrderPrint() {
         if (this.root === null) {
             return [];
@@ -56,3 +85,15 @@ class BinaryTree {
         return result;        
     }
 }
+
+(function test() {
+    let bst = new BinaryTree()
+    bst.insert(7)
+    bst.insert(5)
+    bst.insert(9)
+    bst.insert(3)
+    bst.insert(11)
+    console.log(bst.levelOrderPrint())
+    let node = bst.find(9)
+    console.log(bst.ceil(node))
+})()
