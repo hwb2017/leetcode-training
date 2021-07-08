@@ -27,10 +27,31 @@ class BinaryTree {
                 if (current.right === null) {
                     current.right = new TreeNode(val);
                     break
-                }                
+                }
                 current = current.right
             }
         }
+    }
+    delete(val) {
+      let deleteNode = this.find(val);
+      if (deleteNode === null) {
+          return false;
+      }
+      let { node: parent, relation } = this.prev(val);
+      if (deleteNode.left === null && deleteNode.right === null) {
+          parent[relation] = null;
+      } else if (deleteNode.left === null) {
+          parent[relation] = deleteNode.right;
+      } else if (deleteNode.right === null) {
+          parent[relation] = deleteNode.left;
+      } else {
+          let ceilNode = this.ceil(deleteNode);
+          let ceilVal = ceilNode.val;
+          let { node: ceilParent, relation: ceilRelation } = this.prev(ceilVal);
+          ceilParent[ceilRelation] = null;
+          deleteNode.val = ceilVal;
+      }
+      return true;
     }
     // 寻找树中大于给定节点值的最小节点，即给定节点右子树中的最小节点
     ceil(node) {
@@ -51,14 +72,36 @@ class BinaryTree {
       }
     }
     find(val, current = this.root) {
-        if (current === null) return null
+        if (current === null) return null;
         if (current.val === val) {
-            return current
+            return current;
         }
         if (current.val < val) {
-            return this.find(val, current.right)
+            return this.find(val, current.right);
         } else if (current.val < val) {
-            return this.find(val, current.left)
+            return this.find(val, current.left);
+        }
+    }
+    prev(val, current = this.root) {
+        if (current === null) return null;
+        // if (current?.left.val === val || current?.right.val === val) {
+        if (current.left && current.left.val === val) {
+            return {
+                node: current,
+                relation: "left"
+            }
+        }
+        if (current.right && current.right.val === val) {    
+            return {
+                node: current,
+                relation: "right"
+            }
+        } else {
+            if (current.val < val) {
+                return this.prev(val, current.right);
+            } else if (current.val < val) {
+                return this.prev(val, current.left);
+            }            
         }
     }
     levelOrderPrint() {
@@ -93,7 +136,12 @@ class BinaryTree {
     bst.insert(9)
     bst.insert(3)
     bst.insert(11)
+    bst.insert(10)
+    bst.insert(8)
     console.log(bst.levelOrderPrint())
-    let node = bst.find(9)
-    console.log(bst.ceil(node))
+    // let node = bst.find(9)
+    // console.log(bst.ceil(node))
+    // console.log(bst.prev(11))
+    bst.delete(9)
+    console.log(bst.levelOrderPrint())
 })()
